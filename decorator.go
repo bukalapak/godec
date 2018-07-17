@@ -36,3 +36,18 @@ type Method struct {
 	// Then, the last return value will always be an error.
 	ReturnValues []DataType
 }
+
+// DataType is a struct that represent golang data type.
+type DataType struct {
+	// Name is variable name for data type.
+	Name string
+
+	// Type is type name such as string, error, map[string][string], interface{}, etc.
+	Type string
+
+	// ZeroValue is default value for data type.
+	// It is used as default return value when an error is occured.
+	//
+	// Example: zero value for int is 0, zero value for pointer is nil, etc.
+	ZeroValue string
+}
