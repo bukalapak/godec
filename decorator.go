@@ -73,7 +73,7 @@ type Template struct {
 // Decorator is used to decorate a file.
 type Decorator interface {
 	// Decorate decorates the given file.
-	Decorate(ctx context.Context, file File) error
+	Decorate(ctx context.Context, file File, templates ...Template) error
 }
 
 // Parser is used to parse file and find the desired interface.
