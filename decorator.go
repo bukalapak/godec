@@ -2,6 +2,7 @@ package godec
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pkg/errors"
 )
@@ -98,10 +99,15 @@ func (d *decorator) Decorate(ctx context.Context, file File, templates ...Templa
 	}
 
 	for _, template := range templates {
-		err = d.decorate(file, template)
+		err = d.decorate(intf, template)
+		if err != nil {
+			errors.Wrap(err, fmt.Sprintf("failed to create decorator for %s using template %s", file.Location, template.Location))
+		}
 	}
+
+	return nil
 }
 
-func (d *decorator) decorate(file File, template Template) error {
+func (d *decorator) decorate(intf Interface, template Template) error {
 	return nil
 }
