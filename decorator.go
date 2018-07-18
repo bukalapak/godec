@@ -60,13 +60,12 @@ type File struct {
 	// Example: github.com/bukalapak/godec/example.go.
 	Location string
 
-	// Interfaces are list of interface that needs to be decorated.
-	Interfaces []string
+	// Interface is an interface that needs to be decorated.
+	Interface string
 }
 
 // Decorator is used to decorate a file.
 type Decorator interface {
 	// Decorate decorates the given file.
-	// The output will be in folder `decorator/*``.
 	Decorate(ctx context.Context, file File) error
 }
