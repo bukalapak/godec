@@ -1,10 +1,18 @@
 package godec
 
-import "context"
+import (
+	"context"
+
+	"github.com/pkg/errors"
+	goparser "github.com/zpatrick/go-parser"
+)
 
 type parser struct {
 }
 
 func (p *parser) Parse(ctx context.Context, file File) (Interface, error) {
-	return Interface{}, nil
+	f, err := goparser.ParseSingleFile(file.Location)
+	if err != nil {
+		errors.Wrap(err, "couldn't parse file "+file.Location)
+	}
 }
