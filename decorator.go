@@ -1,6 +1,10 @@
 package godec
 
-import "context"
+import (
+	"context"
+
+	"github.com/pkg/errors"
+)
 
 // Interface is a struct that represents golang interface data.
 type Interface struct {
@@ -85,4 +89,11 @@ type Parser interface {
 
 type decorator struct {
 	parser Parser
+}
+
+func (d *decorator) Decorate(ctx context.Context, file File, templates ...Template) error {
+	intf, err := d.parser.Parse(ctx, file)
+	if err != nil {
+		return errors.Wrap(err, "couldn't parse given file")
+	}
 }
