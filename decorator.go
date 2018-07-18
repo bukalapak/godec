@@ -51,3 +51,13 @@ type DataType struct {
 	// Example: zero value for int is 0, zero value for pointer is nil, etc.
 	ZeroValue string
 }
+
+// File is a struct that represent a golang file that containts some interfaces.
+type File struct {
+	// Location is file's location in the system.
+	// Example: github.com/bukalapak/godec/example.go.
+	Location string
+
+	// Interfaces are list of interface that needs to be decorated.
+	Interfaces []string
+}
