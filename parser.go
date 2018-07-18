@@ -13,6 +13,11 @@ type parser struct {
 func (p *parser) Parse(ctx context.Context, file File) (Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
-		errors.Wrap(err, "couldn't parse file "+file.Location)
+		errors.Wrap(err, "couldn't parse file")
+	}
+
+	pkg, err := f.ImportPath()
+	if err != nil {
+		errors.Wrap(err, "couldn't get import path")
 	}
 }
