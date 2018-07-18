@@ -96,4 +96,12 @@ func (d *decorator) Decorate(ctx context.Context, file File, templates ...Templa
 	if err != nil {
 		return errors.Wrap(err, "couldn't parse given file")
 	}
+
+	for _, template := range templates {
+		err = d.decorate(file, template)
+	}
+}
+
+func (d *decorator) decorate(file File, template Template) error {
+	return nil
 }
