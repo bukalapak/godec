@@ -69,3 +69,10 @@ type Decorator interface {
 	// Decorate decorates the given file.
 	Decorate(ctx context.Context, file File) error
 }
+
+// Parser is used to parse file and find the desired interface.
+type Parser interface {
+	// Parse parse the given file.
+	// It will find the desired interface and return it.
+	Parse(ctx context.Context, file File) (Interface, error)
+}
