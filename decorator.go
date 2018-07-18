@@ -64,6 +64,12 @@ type File struct {
 	Interface string
 }
 
+// Template is a struct that holds decorator template data.
+type Template struct {
+	// Location is template's location in the system.
+	Location string
+}
+
 // Decorator is used to decorate a file.
 type Decorator interface {
 	// Decorate decorates the given file.
