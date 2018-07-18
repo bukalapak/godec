@@ -1,5 +1,7 @@
 package godec
 
+import "context"
+
 // Interface is a struct that represents golang interface data.
 type Interface struct {
 	// Name is interface's name.
@@ -60,4 +62,11 @@ type File struct {
 
 	// Interfaces are list of interface that needs to be decorated.
 	Interfaces []string
+}
+
+// Decorator is used to decorate a file.
+type Decorator interface {
+	// Decorate decorates the given file.
+	// The output will be in folder `decorator/*``.
+	Decorate(ctx context.Context, file File) error
 }
