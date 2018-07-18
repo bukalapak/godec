@@ -82,3 +82,7 @@ type Parser interface {
 	// It will find the desired interface and return it.
 	Parse(ctx context.Context, file File) (Interface, error)
 }
+
+type decorator struct {
+	parser Parser
+}
