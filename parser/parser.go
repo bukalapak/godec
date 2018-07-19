@@ -23,20 +23,20 @@ func NewParser() *Parser {
 func (p *Parser) Parse(ctx context.Context, file godec.File) (godec.Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
-		return Interface{}, errors.Wrap(err, "couldn't parse file")
+		return godec.Interface{}, errors.Wrap(err, "couldn't parse file")
 	}
 
 	pkg, err := f.ImportPath()
 	if err != nil {
-		return Interface{}, errors.Wrap(err, "couldn't get import path")
+		return godec.Interface{}, errors.Wrap(err, "couldn't get import path")
 	}
 
 	i, err := p.findInterface(f, file.Interface)
 	if err != nil {
-		return Interface{}, err
+		return godec.Interface{}, err
 	}
 
-	intf := Interface{
+	intf := godec.Interface{
 		Name:        i.Name,
 		Package:     f.Package,
 		PackagePath: pkg,
@@ -56,14 +56,14 @@ func (p *Parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInt
 	return nil, fmt.Errorf("interface %s not found", name)
 }
 
-func (p *Parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
-	var methods []Method
+func (p *Parser) findMethods(pkg string, intf *goparser.GoInterface) []godec.Method {
+	var methods []godec.Method
 
 	for _, m := range intf.Methods {
-		method := Method{Name: m.Name}
+		method := godec.Method{Name: m.Name}
 
 		for _, prm := range m.Params {
-			param := DataType{
+			param := godec.DataType{
 				Name: "x",
 				Type: p.getType(pkg, prm),
 			}
@@ -71,7 +71,7 @@ func (p *Parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 		}
 
 		for _, res := range m.Results {
-			result := DataType{
+			result := godec.DataType{
 				Type:      p.getType(pkg, res),
 				ZeroValue: p.getZeroValue(pkg, res),
 			}
