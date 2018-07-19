@@ -5,18 +5,20 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/bukalapak/godec"
 	"github.com/pkg/errors"
 	goparser "github.com/zpatrick/go-parser"
 )
 
-type parser struct {
+// Parser is a struct that implement godec.Parser interface.
+type Parser struct {
 }
 
-func newParser() *parser {
-	return &parser{}
+func newParser() *Parser {
+	return &Parser{}
 }
 
-func (p *parser) Parse(ctx context.Context, file File) (Interface, error) {
+func (p *Parser) Parse(ctx context.Context, file godec.File) (godec.Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
 		return Interface{}, errors.Wrap(err, "couldn't parse file")
@@ -42,7 +44,7 @@ func (p *parser) Parse(ctx context.Context, file File) (Interface, error) {
 	return intf, nil
 }
 
-func (p *parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInterface, error) {
+func (p *Parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInterface, error) {
 	for _, intf := range f.Interfaces {
 		if intf.Name == name {
 			return intf, nil
@@ -52,7 +54,7 @@ func (p *parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInt
 	return nil, fmt.Errorf("interface %s not found", name)
 }
 
-func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
+func (p *Parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 	var methods []Method
 
 	for _, m := range intf.Methods {
@@ -80,7 +82,7 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 	return methods
 }
 
-func (p *parser) getType(pkg string, t *goparser.GoType) string {
+func (p *Parser) getType(pkg string, t *goparser.GoType) string {
 	if m, err := regexp.MatchString("[.]", t.Underlying); err != nil && m {
 		return t.Type
 	} else if t.Type[0] == '*' {
@@ -90,7 +92,7 @@ func (p *parser) getType(pkg string, t *goparser.GoType) string {
 	}
 }
 
-func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
+func (p *Parser) getZeroValue(pkg string, t *goparser.GoType) string {
 	if t.Underlying[:6] == "struct" {
 		return p.getType(pkg, t) + "{}"
 	} else if m, err := regexp.MatchString(".*int.*", t.Underlying); err != nil && m {
