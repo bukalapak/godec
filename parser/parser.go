@@ -18,6 +18,7 @@ func newParser() *Parser {
 	return &Parser{}
 }
 
+// Parse parses godec file to godec interface.
 func (p *Parser) Parse(ctx context.Context, file godec.File) (godec.Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
