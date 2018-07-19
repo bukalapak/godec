@@ -61,7 +61,19 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 			}
 			method.Params = append(method.Params, param)
 		}
+
+		for _, res := range m.Results {
+			result := DataType{
+				Type:      p.getType(pkg, res),
+				ZeroValue: p.getZeroValue(pkg, res),
+			}
+			method.ReturnValues = append(method.ReturnValues, result)
+		}
+
+		methods = append(methods, method)
 	}
+
+	return methods
 }
 
 func (p *parser) getType(pkg string, t *goparser.GoType) string {
