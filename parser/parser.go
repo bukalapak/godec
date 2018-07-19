@@ -20,23 +20,23 @@ func NewParser() *Parser {
 }
 
 // Parse parses godec file to godec interface.
-func (p *Parser) Parse(ctx context.Context, file godec.File) (godec.Interface, error) {
+func (p *Parser) Parse(ctx context.Context, file *godec.File) (*godec.Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
-		return godec.Interface{}, errors.Wrap(err, "couldn't parse file")
+		return nil, errors.Wrap(err, "couldn't parse file")
 	}
 
 	pkg, err := f.ImportPath()
 	if err != nil {
-		return godec.Interface{}, errors.Wrap(err, "couldn't get import path")
+		return nil, errors.Wrap(err, "couldn't get import path")
 	}
 
 	i, err := p.findInterface(f, file.Interface)
 	if err != nil {
-		return godec.Interface{}, err
+		return nil, err
 	}
 
-	intf := godec.Interface{
+	intf := &godec.Interface{
 		Name:        i.Name,
 		Package:     f.Package,
 		PackagePath: pkg,
