@@ -84,3 +84,9 @@ type Parser interface {
 	// It will find the desired interface and return it.
 	Parse(ctx context.Context, file *File) (*Interface, error)
 }
+
+// Executor is used to execute interface using a template.
+type Executor interface {
+	// Execute executes given godec interface to create golang interface using given template.
+	Execute(ctx context.Context, intf *Interface, template *Template) error
+}
