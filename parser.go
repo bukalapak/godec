@@ -3,6 +3,7 @@ package godec
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	"github.com/pkg/errors"
 	goparser "github.com/zpatrick/go-parser"
@@ -53,10 +54,10 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 	for _, m := range intf.Methods {
 		method := Method{Name: m.Name}
 
-		for _, p := range m.Params {
+		for _, prm := range m.Params {
 			param := DataType{
 				Name: "x",
-				Type: p.getType(pkg, p)
+				Type: p.getType(pkg, prm),
 			}
 			method.Params = append(method.Params, param)
 		}
