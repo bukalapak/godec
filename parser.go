@@ -1,26 +1,24 @@
-package parser
+package godec
 
 import (
 	"context"
 	"fmt"
 	"regexp"
 
-	"github.com/bukalapak/godec"
 	"github.com/pkg/errors"
 	goparser "github.com/zpatrick/go-parser"
 )
 
-// Parser is a struct that implement godec.Parser interface.
-type Parser struct {
+type fileParser struct {
 }
 
-// New creates an instance of Parser.
-func New() *Parser {
-	return &Parser{}
+// NewParser creates an instance of Parser.
+func NewParser() Parser {
+	return &fileParser{}
 }
 
 // Parse parses godec file to godec interface.
-func (p *Parser) Parse(ctx context.Context, file *godec.File) (*godec.Interface, error) {
+func (fp *fileParser) Parse(ctx context.Context, file *File) (*Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't parse file")
@@ -31,22 +29,22 @@ func (p *Parser) Parse(ctx context.Context, file *godec.File) (*godec.Interface,
 		return nil, errors.Wrap(err, "couldn't get import path")
 	}
 
-	i, err := p.findInterface(f, file.Interface)
+	i, err := fp.findInterface(f, file.Interface)
 	if err != nil {
 		return nil, err
 	}
 
-	intf := &godec.Interface{
+	intf := &Interface{
 		Name:        i.Name,
 		Package:     f.Package,
 		PackagePath: pkg,
-		Methods:     p.findMethods(f.Package, i),
+		Methods:     fp.findMethods(f.Package, i),
 	}
 
 	return intf, nil
 }
 
-func (p *Parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInterface, error) {
+func (fp *fileParser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInterface, error) {
 	for _, intf := range f.Interfaces {
 		if intf.Name == name {
 			return intf, nil
@@ -56,24 +54,24 @@ func (p *Parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInt
 	return nil, fmt.Errorf("interface %s not found", name)
 }
 
-func (p *Parser) findMethods(pkg string, intf *goparser.GoInterface) []godec.Method {
-	var methods []godec.Method
+func (fp *fileParser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
+	var methods []Method
 
 	for _, m := range intf.Methods {
-		method := godec.Method{Name: m.Name}
+		method := Method{Name: m.Name}
 
 		for _, prm := range m.Params {
-			param := godec.DataType{
+			param := DataType{
 				Name: "x",
-				Type: p.getType(pkg, prm),
+				Type: fp.getType(pkg, prm),
 			}
 			method.Params = append(method.Params, param)
 		}
 
 		for _, res := range m.Results {
-			result := godec.DataType{
-				Type:      p.getType(pkg, res),
-				ZeroValue: p.getZeroValue(pkg, res),
+			result := DataType{
+				Type:      fp.getType(pkg, res),
+				ZeroValue: fp.getZeroValue(pkg, res),
 			}
 			method.ReturnValues = append(method.ReturnValues, result)
 		}
@@ -84,7 +82,7 @@ func (p *Parser) findMethods(pkg string, intf *goparser.GoInterface) []godec.Met
 	return methods
 }
 
-func (p *Parser) getType(pkg string, t *goparser.GoType) string {
+func (fp *fileParser) getType(pkg string, t *goparser.GoType) string {
 	if m, err := regexp.MatchString("[.]", t.Underlying); err != nil && m {
 		return t.Type
 	} else if t.Type[0] == '*' {
@@ -94,9 +92,9 @@ func (p *Parser) getType(pkg string, t *goparser.GoType) string {
 	}
 }
 
-func (p *Parser) getZeroValue(pkg string, t *goparser.GoType) string {
+func (fp *fileParser) getZeroValue(pkg string, t *goparser.GoType) string {
 	if t.Underlying[:6] == "struct" {
-		return p.getType(pkg, t) + "{}"
+		return fp.getType(pkg, t) + "{}"
 	} else if m, err := regexp.MatchString(".*int.*", t.Underlying); err != nil && m {
 		return "0"
 	} else if m, err := regexp.MatchString(".*float.*", t.Underlying); err != nil && m {
