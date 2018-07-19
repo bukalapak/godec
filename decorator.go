@@ -12,9 +12,9 @@ type decorator struct {
 }
 
 // NewDecorator returns an instance of decorator.
-func NewDecorator() Decorator {
+func NewDecorator(parser Parser) Decorator {
 	return &decorator{
-		parser: newParser(),
+		parser: parser,
 	}
 }
 
