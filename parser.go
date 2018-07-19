@@ -62,3 +62,13 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 		}
 	}
 }
+
+func (p *parser) getType(pkg string, t *goparser.GoType) string {
+	if m, err := regexp.MatchString("[.]", t.Underlying); err != nil && m {
+		return t.Type
+	} else if t.Type[0] == '*' {
+		return "*" + pkg + "." + t.Type[1:]
+	} else {
+		return pkg + "." + t.Type
+	}
+}
