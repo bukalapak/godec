@@ -12,6 +12,10 @@ import (
 type parser struct {
 }
 
+func newParser() *parser {
+	return &parser{}
+}
+
 func (p *parser) Parse(ctx context.Context, file File) (Interface, error) {
 	f, err := goparser.ParseSingleFile(file.Location)
 	if err != nil {
