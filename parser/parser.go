@@ -14,7 +14,8 @@ import (
 type Parser struct {
 }
 
-func newParser() *Parser {
+// NewParser creates an instance of Parser.
+func NewParser() *Parser {
 	return &Parser{}
 }
 
