@@ -22,10 +22,19 @@ func (p *parser) Parse(ctx context.Context, file File) (Interface, error) {
 		return Interface{}, errors.Wrap(err, "couldn't get import path")
 	}
 
-	intf, err := p.findInterface(f, file.Interface)
+	i, err := p.findInterface(f, file.Interface)
 	if err != nil {
 		return Interface{}, err
 	}
+
+	intf := Interface{
+		Name:        i.Name,
+		Package:     f.Package,
+		PackagePath: pkg,
+		Methods:     p.findMethods(f.Package, i),
+	}
+
+	return intf, nil
 }
 
 func (p *parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInterface, error) {
