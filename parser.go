@@ -85,3 +85,17 @@ func (p *parser) getType(pkg string, t *goparser.GoType) string {
 		return pkg + "." + t.Type
 	}
 }
+
+func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
+	if t.Underlying[:6] == "struct" {
+		return p.getType(pkg, t) + "{}"
+	} else if m, err := regexp.MatchString(".*int.*", t.Underlying); err != nil && m {
+		return "0"
+	} else if m, err := regexp.MatchString(".*float.*", t.Underlying); err != nil && m {
+		return "0"
+	} else if t.Underlying == "string" {
+		return "\"\""
+	} else {
+		return "nil"
+	}
+}
