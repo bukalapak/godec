@@ -46,3 +46,19 @@ func (p *parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInt
 
 	return nil, fmt.Errorf("interface %s not found", name)
 }
+
+func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
+	var methods []Method
+
+	for _, m := range intf.Methods {
+		method := Method{Name: m.Name}
+
+		for _, p := range m.Params {
+			param := DataType{
+				Name: "x",
+				Type: p.getType(pkg, p)
+			}
+			method.Params = append(method.Params, param)
+		}
+	}
+}
