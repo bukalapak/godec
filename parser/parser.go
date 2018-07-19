@@ -1,4 +1,4 @@
-package godec
+package parser
 
 import (
 	"context"
