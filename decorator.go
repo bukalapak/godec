@@ -16,7 +16,7 @@ func NewDecorator() Decorator {
 	return &decorator{}
 }
 
-func (d *decorator) Decorate(ctx context.Context, file File, templates ...Template) error {
+func (d *decorator) Decorate(ctx context.Context, file *File, templates ...*Template) error {
 	intf, err := d.parser.Parse(ctx, file)
 	if err != nil {
 		return errors.Wrap(err, "couldn't parse given file")
@@ -32,6 +32,6 @@ func (d *decorator) Decorate(ctx context.Context, file File, templates ...Templa
 	return nil
 }
 
-func (d *decorator) decorate(intf Interface, template Template) error {
+func (d *decorator) decorate(intf *Interface, template *Template) error {
 	return nil
 }
