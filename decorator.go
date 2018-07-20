@@ -12,8 +12,10 @@ type decorator struct {
 }
 
 // NewDecorator returns an instance of decorator.
-func NewDecorator() Decorator {
-	return &decorator{}
+func NewDecorator(parser Parser) Decorator {
+	return &decorator{
+		parser: parser,
+	}
 }
 
 func (d *decorator) Decorate(ctx context.Context, file *File, templates ...*Template) error {
