@@ -8,13 +8,15 @@ import (
 )
 
 type decorator struct {
-	parser Parser
+	parser   Parser
+	executor Executor
 }
 
 // NewDecorator returns an instance of decorator.
-func NewDecorator(parser Parser) Decorator {
+func NewDecorator(parser Parser, executor Executor) Decorator {
 	return &decorator{
-		parser: parser,
+		parser:   parser,
+		executor: executor,
 	}
 }
 
@@ -25,15 +27,11 @@ func (d *decorator) Decorate(ctx context.Context, file *File, templates ...*Temp
 	}
 
 	for _, template := range templates {
-		err = d.decorate(intf, template)
+		err = d.executor.Execute(ctx, intf, template)
 		if err != nil {
 			errors.Wrap(err, fmt.Sprintf("failed to create decorator for %s using template %s", file.Location, template.Name))
 		}
 	}
 
-	return nil
-}
-
-func (d *decorator) decorate(intf *Interface, template *Template) error {
 	return nil
 }
