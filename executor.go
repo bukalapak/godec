@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 
 	"github.com/pkg/errors"
@@ -29,8 +30,14 @@ func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template)
 		return errors.Wrap(err, "could't parse template file")
 	}
 
-	p := path.Join(outputPath, tmpl.Name)
-	if err = os.MkdirAll(p, os.ModePerm); err != nil {
+	oPath := path.Join(outputPath, tmpl.Name)
+	if err = os.MkdirAll(oPath, os.ModePerm); err != nil {
 		return errors.Wrap(err, "couldn't make output directory")
+	}
+
+	fileName := path.Join(oPath, strings.ToLower(intf.Name)+".go")
+	file, err := os.Create(fileName)
+	if err != nil {
+		return errors.Wrap(err, "couldn't create decorator file")
 	}
 }
