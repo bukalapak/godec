@@ -33,13 +33,8 @@ func NewExecutor() Executor {
 //
 // For convenience, the generated file will automatically be formatted using `gofmt -s w`.
 func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template) error {
-	t, err := template.ParseFiles(path.Join(os.Getenv("GOPATH"), templatePath, tmpl.Name+".go.tmpl"))
-	if err != nil {
-		return errors.Wrap(err, "could't parse template file")
-	}
-
 	oPath := path.Join(outputPath, tmpl.Name)
-	if err = os.MkdirAll(oPath, os.ModePerm); err != nil {
+	if err := os.MkdirAll(oPath, os.ModePerm); err != nil {
 		return errors.Wrap(err, "couldn't make output directory")
 	}
 
@@ -47,6 +42,11 @@ func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template)
 	file, err := os.Create(fileName)
 	if err != nil {
 		return errors.Wrap(err, "couldn't create decorator file")
+	}
+
+	t, err := template.ParseFiles(path.Join(os.Getenv("GOPATH"), templatePath, tmpl.Name+".go.tmpl"))
+	if err != nil {
+		return errors.Wrap(err, "could't parse template file")
 	}
 
 	if err = t.Execute(file, intf); err != nil {
