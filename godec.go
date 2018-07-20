@@ -68,8 +68,13 @@ type File struct {
 
 // Template is a struct that holds decorator template data.
 type Template struct {
-	// Location is template's location in the system.
-	Location string
+	// Name is template's name.
+	// Godec will use godec path as default path.
+	// Thus, any template should be located in godec/template folder.
+	//
+	// Let say there is a template named canceler.go.tmpl in godec/template,
+	// users should only use `canceler` as template's name.
+	Name string
 }
 
 // Decorator is used to decorate a file.
