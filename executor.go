@@ -19,6 +19,11 @@ const (
 type executor struct {
 }
 
+// NewExecutor creates an instance of executor.
+func NewExecutor() Executor {
+	return &executor{}
+}
+
 // Execute executes given godec interface to generate a new golang interface using given template.
 // The generated file will be located in folder decorator, relative to current directory.
 // The generated file's name will be `{tmpl.Name}/{intf.Name}.go`.
