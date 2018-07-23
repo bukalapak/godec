@@ -60,9 +60,9 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 	for _, m := range intf.Methods {
 		method := Method{Name: m.Name}
 
-		for _, prm := range m.Params {
+		for idx, prm := range m.Params {
 			param := DataType{
-				Name: "x",
+				Name: p.intToString(idx),
 				Type: p.getType(pkg, prm),
 			}
 			method.Params = append(method.Params, param)
@@ -104,4 +104,8 @@ func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
 	} else {
 		return "nil"
 	}
+}
+
+func (p *parser) intToString(i int) string {
+	return string('a' + i)
 }
