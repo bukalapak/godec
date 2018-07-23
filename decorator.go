@@ -29,7 +29,7 @@ func (d *decorator) Decorate(ctx context.Context, file *File, templates ...*Temp
 	for _, template := range templates {
 		err = d.executor.Execute(ctx, intf, template)
 		if err != nil {
-			errors.Wrap(err, fmt.Sprintf("failed to create decorator for %s using template %s", file.Location, template.Name))
+			return errors.Wrap(err, fmt.Sprintf("failed to create decorator for %s using template %s", file.Location, template.Name))
 		}
 	}
 
