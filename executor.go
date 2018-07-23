@@ -31,7 +31,7 @@ func NewExecutor() Executor {
 // Please, keep in mind that the template will be loaded from `$GOPATH/src/github.com/bukalapak/godec/template` folder.
 // It will look for `{tmpl.Name}.go.tmpl` in that folder.
 //
-// For convenience, the generated file will automatically be formatted using `gofmt -s w`.
+// For convenience, the generated file will automatically be formatted using `goimports -w <file name>`.
 func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template) error {
 	oPath := path.Join(outputPath, tmpl.Name)
 	if err := os.MkdirAll(oPath, os.ModePerm); err != nil {
@@ -53,5 +53,5 @@ func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template)
 		return errors.Wrap(err, "couldn't make decorator from template")
 	}
 
-	return exec.CommandContext(ctx, "gofmt", "-s", "-w", fileName).Run()
+	return exec.CommandContext(ctx, "goimports", "-w", fileName).Run()
 }

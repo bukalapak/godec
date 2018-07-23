@@ -60,9 +60,9 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 	for _, m := range intf.Methods {
 		method := Method{Name: m.Name}
 
-		for _, prm := range m.Params {
+		for idx, prm := range m.Params {
 			param := DataType{
-				Name: "x",
+				Name: p.intToString(idx),
 				Type: p.getType(pkg, prm),
 			}
 			method.Params = append(method.Params, param)
@@ -83,13 +83,10 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 }
 
 func (p *parser) getType(pkg string, t *goparser.GoType) string {
-	if m, err := regexp.MatchString("[.]", t.Underlying); err != nil && m {
-		return t.Type
-	} else if t.Type[0] == '*' {
-		return "*" + pkg + "." + t.Type[1:]
-	} else {
-		return pkg + "." + t.Type
+	if found, err := regexp.MatchString(pkg, t.Underlying); err == nil && found {
+		return t.Underlying
 	}
+	return t.Type
 }
 
 func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
@@ -104,4 +101,8 @@ func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
 	} else {
 		return "nil"
 	}
+}
+
+func (p *parser) intToString(i int) string {
+	return string('a' + i)
 }
