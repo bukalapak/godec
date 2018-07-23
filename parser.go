@@ -90,13 +90,13 @@ func (p *parser) getType(pkg string, t *goparser.GoType) string {
 }
 
 func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
-	if t.Underlying[:6] == "struct" {
+	if len(t.Underlying) >= 6 && t.Underlying[:6] == "struct" {
 		return p.getType(pkg, t) + "{}"
-	} else if m, err := regexp.MatchString(".*int.*", t.Underlying); err != nil && m {
+	} else if found, err := regexp.MatchString(".*int.*", t.Type); err == nil && found {
 		return "0"
-	} else if m, err := regexp.MatchString(".*float.*", t.Underlying); err != nil && m {
+	} else if found, err := regexp.MatchString(".*float.*", t.Type); err == nil && found {
 		return "0"
-	} else if t.Underlying == "string" {
+	} else if t.Type == "string" {
 		return "\"\""
 	} else {
 		return "nil"
