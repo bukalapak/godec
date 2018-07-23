@@ -5,9 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/bukalapak/godec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewExecutor(t *testing.T) {
