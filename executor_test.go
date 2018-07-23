@@ -15,7 +15,7 @@ func TestNewExecutor(t *testing.T) {
 	assert.Implements(t, (*godec.Executor)(nil), executor)
 }
 
-func Test_executor_Execute(t *testing.T) {
+func Test_executor_Execute_Success(t *testing.T) {
 	defer os.RemoveAll("decorator")
 
 	intf := &godec.Interface{
@@ -33,11 +33,23 @@ func Test_executor_Execute(t *testing.T) {
 	// template found
 	err := executor.Execute(context.Background(), intf, template)
 	assert.Nil(t, err)
+}
+
+func Test_executor_Execute_Error(t *testing.T) {
+	defer os.RemoveAll("decorator")
+
+	intf := &godec.Interface{
+		Name:        "AnInterface",
+		Package:     "something",
+		PackagePath: "github.com/you/something",
+	}
+
+	executor := godec.NewExecutor()
 
 	// template not found
 	notFoundTemplate := &godec.Template{
 		Name: "404Template",
 	}
-	err = executor.Execute(context.Background(), intf, notFoundTemplate)
+	err := executor.Execute(context.Background(), intf, notFoundTemplate)
 	assert.NotNil(t, err)
 }
