@@ -7,10 +7,12 @@ import (
   "{{ .PackagePath }}"
 )
 
+// {{ $interface }}Canceler
 type {{ $interface }}Canceler struct {
   Decorated {{ .Package }}.{{ $interface }}
 } 
 {{ range .Methods }}
+// {{ .Name }}
 func (d *{{ $interface }}Canceler) {{ .Name }}({{ range $index, $element := .Params}}{{ if not (eq $index 0) }}, {{ end }}{{ .Name }} {{ .Type }} {{- end }}) ({{ range $index, $element := .ReturnValues}}{{ if not (eq $index 0) }}, {{ end }}{{ .Type }} {{- end }}) {
   select {
     case <- {{ range $index, $element := .Params }}{{ if eq $index 0 }}{{ .Name }}{{ end }}{{ end }}.Done():
