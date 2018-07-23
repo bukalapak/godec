@@ -15,7 +15,7 @@ func TestNewParser(t *testing.T) {
 	assert.Implements(t, (*godec.Parser)(nil), parser)
 }
 
-func Test_parser_Parse(t *testing.T) {
+func Test_parser_Parse_Success(t *testing.T) {
 	parser := godec.NewParser()
 
 	file := &godec.File{
