@@ -46,7 +46,7 @@ func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template)
 
 	t, err := template.ParseFiles(path.Join(os.Getenv("GOPATH"), templatePath, tmpl.Name+".go.tmpl"))
 	if err != nil {
-		return errors.Wrap(err, "could't parse template file")
+		return errors.Wrap(err, "couldn't parse template file")
 	}
 
 	if err = t.Execute(file, intf); err != nil {
