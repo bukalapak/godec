@@ -2,6 +2,7 @@ package godec_test
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,6 +16,8 @@ func TestNewExecutor(t *testing.T) {
 }
 
 func Test_executor_Execute(t *testing.T) {
+	defer os.RemoveAll("decorator")
+
 	intf := &godec.Interface{
 		Name:        "AnInterface",
 		Package:     "something",
