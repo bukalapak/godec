@@ -8,13 +8,13 @@ Godec is decorator fabricator. Godec will automatically create a decorator for d
 
 ## Usage
 
-1. Install godec
+### Install godec
 
   ```sh
   go install github.com/bukalapak/godec/app/godec
   ```
 
-2. Add `go:generate` hook in desired file
+### Add `go:generate` hook in desired file
 
   ```go
   //go:generate godec MyInterface canceler
@@ -32,7 +32,7 @@ Godec is decorator fabricator. Godec will automatically create a decorator for d
   [interface name] is the name of interface to be decorated. In the example above, interface's name is `MyInterface`.
   [decorator name] is the name of decorator. In the example above, decorator's name is `canceler`. Please, note that desired decorator must be placed in [template/](https://github.com/bukalapak/godec/tree/master/template) folder. Godec will find the desired template there. The name of the template decorator must be `<name>.go.tmpl`. Please, look at [template/](https://github.com/bukalapak/godec/tree/master/template) for clarity.
 
-3. Run `go generate`
+### Run `go generate`
 
   ```sh
   go generate
