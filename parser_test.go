@@ -39,3 +39,26 @@ func Test_parser_Parse_Success(t *testing.T) {
 	assert.Equal(t, "error", intf.Methods[0].ReturnValues[1].Type)
 	assert.Equal(t, "nil", intf.Methods[0].ReturnValues[1].ZeroValue)
 }
+
+func Test_parser_Parse_Error(t *testing.T) {
+	parser := godec.NewParser()
+
+	// no file
+	notFoundFile := &godec.File{
+		Location: path.Join(os.Getenv("GOPATH"), "src/github.com/bukalapak/godec/something.go"),
+	}
+
+	intf, err := parser.Parse(context.Background(), notFoundFile)
+	assert.NotNil(t, err)
+	assert.Nil(t, intf)
+
+	// no desired interface
+	noDesiredInterface := &godec.File{
+		Location:  path.Join(os.Getenv("GOPATH"), "src/github.com/bukalapak/godec/godec.go"),
+		Interface: "someinterface",
+	}
+
+	intf, err = parser.Parse(context.Background(), noDesiredInterface)
+	assert.NotNil(t, err)
+	assert.Nil(t, intf)
+}
