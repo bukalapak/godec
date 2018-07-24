@@ -31,7 +31,7 @@ script:
   # test gofmt
   - test -z $(gofmt -s -l $GO_FILES) 
   # run all tests
-  - go test -coverprofile c.out ./...
+  - go test -coverprofile c.out
   # run go vet
   - go vet ./...
   # "go vet on steroids" + linter
