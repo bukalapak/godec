@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/bukalapak/godec.svg?branch=master)](https://travis-ci.org/bukalapak/godec)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bukalapak/godec)](https://goreportcard.com/report/github.com/bukalapak/godec)
+[![Documentation](https://godoc.org/github.com/bukalapak/godec?status.svg)](http://godoc.org/github.com/bukalapak/godec)
 
 # Godec
 
