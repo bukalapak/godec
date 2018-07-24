@@ -50,13 +50,13 @@ type DataType struct {
 	Type string
 
 	// ZeroValue is default value for data type.
-	// It is used as default return value when an error is occured.
+	// It is used as default return value when an error is occurred.
 	//
 	// Example: zero value for int is 0, zero value for pointer is nil, etc.
 	ZeroValue string
 }
 
-// File is a struct that represent a golang file that containts some interfaces.
+// File is a struct that represent a golang file that contains some interfaces.
 type File struct {
 	// Location is file's location in the system.
 	// Example: github.com/bukalapak/godec/example.go.
