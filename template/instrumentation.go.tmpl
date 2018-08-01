@@ -20,13 +20,8 @@ type {{ $interface }}Instrumentation struct {
 func (d *{{ $interface }}Instrumentation) {{ .Name }}({{ range $index, $element := .Params}}{{ if not (eq $index 0) }}, {{ end }}{{ .Name }} {{ .Type }} {{- end }}) ({{ range $index, $element := .ReturnValues}}{{ if not (eq $index 0) }}, {{ end }}type{{$index}} {{ .Type }} {{- end }}) {
   start := time.Now()
 	{{ range $index, $element := .ReturnValues}} {{ if not (eq $index 0) }}, {{ end }} type{{$index}} {{- end }} = d.Decorated.A(a)
-	
-  {{ range $index, $element := .ReturnValues}} 
-    {{ if eq $element.Type  "error" }}
-      captureLatency( "{{ $methodName }}" , start, type{{ $index }} )
-    {{ end }}
-  {{ end }}
   
+  {{captureLatency $methodName .ReturnValues}}  
 	return 
 }
 {{ end }}
