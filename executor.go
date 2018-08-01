@@ -53,5 +53,9 @@ func (e *executor) Execute(ctx context.Context, intf *Interface, tmpl *Template)
 		return errors.Wrap(err, "couldn't make decorator from template")
 	}
 
-	return exec.CommandContext(ctx, "goimports", "-w", fileName).Run()
+	if err := exec.CommandContext(ctx, "goimports", "-w", fileName).Run(); err != nil {
+		return err
+	}
+
+	return exec.CommandContext(ctx, "gofmt", "-w", fileName).Run()
 }
