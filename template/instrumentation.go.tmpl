@@ -29,10 +29,8 @@ func (d *{{ $interface }}Instrumentation) {{ .Name }}({{ range $index, $element 
 
 
 func captureLatency(methodName string, start time.Time, err error) {
-	elapsedTime := time.Since(start).Seconds()
-	
-		// Measure your metrics here
-		// example with prometheus cliet
-		// histogram.Observe(interfaceName, methodName, err", elapsedTime)
-		// read more at https://github.com/prometheus/client_golang
+	// Measure your metrics here
+	// example with prometheus client for observe latency 
+	// histogram.Observe(interfaceName, methodName, err", time.Since(start).Seconds())
+	// read more at https://github.com/prometheus/client_golang
 }
