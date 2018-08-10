@@ -35,6 +35,24 @@ func Test_decorator_Decorate_Success(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func Test_decorator_Decorate_Instrumentation_Success(t *testing.T) {
+	file := &godec.File{
+		Location:  path.Join(os.Getenv("GOPATH"), "src/github.com/bukalapak/godec/testdata/sample.go"),
+		Interface: "Sample",
+	}
+
+	template := &godec.Template{
+		Name: "instrumentation",
+	}
+
+	parser := godec.NewParser()
+	executor := godec.NewExecutor()
+	decorator := godec.NewDecorator(parser, executor)
+
+	err := decorator.Decorate(context.Background(), file, template)
+	assert.Nil(t, err)
+}
+
 func Test_decorator_Decorate_Error(t *testing.T) {
 	// not found file
 	notFoundfile := &godec.File{

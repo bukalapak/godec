@@ -13,8 +13,10 @@ type Something struct {
 }
 
 type Nanika interface {
+	A(s Struct) (int, error)
 }
 
+//go:generate godec Sample instrumentation
 type Sample interface {
 	A(s Struct) (int, error)
 	B(s Struct) (Struct, error)
