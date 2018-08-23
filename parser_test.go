@@ -31,7 +31,7 @@ func Test_parser_Parse_Success(t *testing.T) {
 	assert.Equal(t, "github.com/bukalapak/godec/testdata", intf.PackagePath)
 	assert.Equal(t, "A", intf.Methods[0].Name)
 	assert.Equal(t, "a", intf.Methods[0].Params[0].Name)
-	assert.Equal(t, "Struct", intf.Methods[0].Params[0].Type)
+	assert.Equal(t, "github.com/bukalapak/godec/testdata.ABC", intf.Methods[0].Params[0].Type)
 	assert.Equal(t, "int", intf.Methods[0].ReturnValues[0].Type)
 	assert.Equal(t, "0", intf.Methods[0].ReturnValues[0].ZeroValue)
 	assert.Equal(t, "error", intf.Methods[0].ReturnValues[1].Type)

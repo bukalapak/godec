@@ -38,7 +38,7 @@ func (p *parser) Parse(ctx context.Context, file *File) (*Interface, error) {
 		Name:        i.Name,
 		Package:     f.Package,
 		PackagePath: pkg,
-		Methods:     p.findMethods(f.Package, i),
+		Methods:     p.findMethods(f.Package, pkg, i),
 	}
 
 	return intf, nil
@@ -54,7 +54,7 @@ func (p *parser) findInterface(f *goparser.GoFile, name string) (*goparser.GoInt
 	return nil, fmt.Errorf("interface %s not found", name)
 }
 
-func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
+func (p *parser) findMethods(pkg, pkgPath string, intf *goparser.GoInterface) []Method {
 	var methods []Method
 
 	for _, m := range intf.Methods {
@@ -63,14 +63,14 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 		for idx, prm := range m.Params {
 			param := DataType{
 				Name: p.intToString(idx),
-				Type: p.getType(pkg, prm),
+				Type: p.getType(pkg, pkgPath, prm),
 			}
 			method.Params = append(method.Params, param)
 		}
 
 		for _, res := range m.Results {
 			result := DataType{
-				Type:      p.getType(pkg, res),
+				Type:      p.getType(pkg, pkgPath, res),
 				ZeroValue: p.getZeroValue(pkg, res),
 			}
 			method.ReturnValues = append(method.ReturnValues, result)
@@ -82,16 +82,32 @@ func (p *parser) findMethods(pkg string, intf *goparser.GoInterface) []Method {
 	return methods
 }
 
-func (p *parser) getType(pkg string, t *goparser.GoType) string {
+func (p *parser) getType(pkg, path string, t *goparser.GoType) string {
+	if isCustomType(t.Type) {
+		return fmt.Sprintf("%s.%s", path, t.Type)
+	}
+
 	if found, err := regexp.MatchString(`^(\*|)`+pkg+`.`, t.Underlying); err == nil && found {
 		return t.Underlying
 	}
+
 	return t.Type
+}
+
+func isCustomType(t string) bool {
+	concreteTypes := []string{"basic", "error", "pointer", "array", "slice", "map", "chan", "struct", "tuple", "signature", "named", "interface", "int", "string"}
+	for _, v := range concreteTypes {
+		if t == v {
+			return false
+		}
+	}
+
+	return true
 }
 
 func (p *parser) getZeroValue(pkg string, t *goparser.GoType) string {
 	if len(t.Underlying) >= 6 && t.Underlying[:6] == "struct" {
-		return p.getType(pkg, t) + "{}"
+		return p.getType(pkg, "", t) + "{}"
 	} else if found, err := regexp.MatchString(".*int.*", t.Type); err == nil && found {
 		return "0"
 	} else if found, err := regexp.MatchString(".*float.*", t.Type); err == nil && found {
